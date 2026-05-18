@@ -23,7 +23,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <nav className="topbar row spread center gap-sm pad-x pad-safe-top">
+      <nav className="topbar row spread gap-sm">
         <button
           type="button"
           className="brand-btn"

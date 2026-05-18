@@ -104,6 +104,8 @@ button {
   backdrop-filter: blur(12px);
   background: var(--topbar-bg);
   border-bottom: 1px solid var(--border);
+  padding-inline: max(16px, env(safe-area-inset-left)) max(16px, env(safe-area-inset-right));
+  padding-block: max(12px, env(safe-area-inset-top));
 }
 
 .pad-safe-top {
@@ -289,12 +291,20 @@ button {
   font-size: 1.35rem;
   line-height: 1;
   padding-inline: 12px;
-  margin-inline-start: auto;
 }
 
 .sheet-head {
   width: 100%;
   align-self: stretch;
+  justify-content: space-between;
+}
+
+.sheet-head .h2 {
+  flex-shrink: 0;
+}
+
+.sheet-head .btn.icon {
+  margin-inline-start: auto;
 }
 
 .grid-2 {
