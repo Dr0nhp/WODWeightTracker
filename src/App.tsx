@@ -3,7 +3,8 @@ import { ExerciseDetail } from './components/ExerciseDetail';
 import { ExerciseHome } from './components/ExerciseHome';
 import { SettingsPanel } from './components/SettingsPanel';
 import { addExercise, loadState, saveState, updateSettings } from './lib/storage';
-import type { PersistedState } from './lib/types';
+import type { PersistedState, ThemePreference } from './lib/types';
+import { useResolvedAppearance } from './useResolvedAppearance';
 
 type Route = { name: 'home' } | { name: 'exercise'; id: string };
 
@@ -11,6 +12,8 @@ export default function App() {
   const [state, setState] = useState<PersistedState>(() => loadState());
   const [route, setRoute] = useState<Route>({ name: 'home' });
   const [settingsOpen, setSettingsOpen] = useState(false);
+
+  const appearance = useResolvedAppearance(state.settings.theme);
 
   useEffect(() => {
     saveState(state);
@@ -44,6 +47,7 @@ export default function App() {
         <ExerciseDetail
           state={state}
           exerciseId={route.id}
+          appearance={appearance}
           onBack={() => setRoute({ name: 'home' })}
           commit={commit}
         />
@@ -54,6 +58,7 @@ export default function App() {
           state={state}
           onClose={() => setSettingsOpen(false)}
           onChangeDisplayUnit={(u) => commit(updateSettings(state, { displayUnit: u }))}
+          onChangeTheme={(t: ThemePreference) => commit(updateSettings(state, { theme: t }))}
           onImport={(next) => {
             setState(next);
             setSettingsOpen(false);

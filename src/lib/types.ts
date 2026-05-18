@@ -1,5 +1,8 @@
 export type WeightUnit = 'kg' | 'lb';
 
+/** UI colour mode. `system` tracks `prefers-color-scheme`. */
+export type ThemePreference = 'dark' | 'light' | 'system';
+
 export interface Exercise {
   id: string;
   name: string;
@@ -22,6 +25,7 @@ export interface LiftEntry {
 
 export interface Settings {
   displayUnit: WeightUnit;
+  theme: ThemePreference;
 }
 
 export interface PersistedState {

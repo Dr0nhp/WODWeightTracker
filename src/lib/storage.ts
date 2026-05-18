@@ -15,7 +15,7 @@ export function loadState(): PersistedState {
         version: 1,
         exercises: seedExercises(),
         entries: [],
-        settings: { displayUnit: 'kg' },
+        settings: { displayUnit: 'kg', theme: 'dark' },
       };
     }
     const parsed = JSON.parse(raw) as PersistedState;
@@ -31,7 +31,7 @@ export function loadState(): PersistedState {
       version: 1,
       exercises: seedExercises(),
       entries: [],
-      settings: { displayUnit: 'kg' },
+      settings: { displayUnit: 'kg', theme: 'dark' },
     };
   }
 }
@@ -88,13 +88,17 @@ export function importPayload(json: string): PersistedState {
 }
 
 function normalizePersisted(parsed: PersistedState): PersistedState {
-  const settings = parsed.settings?.displayUnit
-    ? parsed.settings
-    : { displayUnit: 'kg' as const };
+  const raw = parsed.settings;
+  const displayUnit =
+    raw?.displayUnit === 'kg' || raw?.displayUnit === 'lb' ? raw.displayUnit : 'kg';
+  const theme =
+    raw?.theme === 'dark' || raw?.theme === 'light' || raw?.theme === 'system'
+      ? raw.theme
+      : 'dark';
 
   return {
     ...parsed,
-    settings,
+    settings: { displayUnit, theme },
     entries: parsed.entries.map((e) => ({
       ...e,
       unit: e.unit ?? 'kg',

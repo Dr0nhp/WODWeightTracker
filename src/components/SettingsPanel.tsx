@@ -1,15 +1,23 @@
-import type { PersistedState } from '../lib/types';
+import type { PersistedState, ThemePreference } from '../lib/types';
 import { DataBackup } from './DataBackup';
 
 type Props = {
   state: PersistedState;
   onClose: () => void;
   onChangeDisplayUnit: (u: 'kg' | 'lb') => void;
+  onChangeTheme: (t: ThemePreference) => void;
   onImport: (next: PersistedState) => void;
 };
 
-export function SettingsPanel({ state, onClose, onChangeDisplayUnit, onImport }: Props) {
+export function SettingsPanel({
+  state,
+  onClose,
+  onChangeDisplayUnit,
+  onChangeTheme,
+  onImport,
+}: Props) {
   const u = state.settings.displayUnit;
+  const t = state.settings.theme;
 
   return (
     <div className="sheet overlay" role="dialog" aria-labelledby="settings-title" onClick={onClose}>
@@ -24,24 +32,32 @@ export function SettingsPanel({ state, onClose, onChangeDisplayUnit, onImport }:
         </header>
 
         <section className="card pad stack gap-sm">
+          <h3 className="h3">Appearance</h3>
+          <p className="muted small">Light mode, dark mode, or match your phone or computer.</p>
+          <div className="segmented segmented-three">
+            <button type="button" className={t === 'dark' ? 'active' : ''} onClick={() => onChangeTheme('dark')}>
+              Dark
+            </button>
+            <button type="button" className={t === 'light' ? 'active' : ''} onClick={() => onChangeTheme('light')}>
+              Light
+            </button>
+            <button type="button" className={t === 'system' ? 'active' : ''} onClick={() => onChangeTheme('system')}>
+              System
+            </button>
+          </div>
+        </section>
+
+        <section className="card pad stack gap-sm">
           <h3 className="h3">Display unit</h3>
           <p className="muted small">
             Charts and summaries convert logged weights into this unit. Each entry still remembers
             the unit you typed.
           </p>
           <div className="segmented">
-            <button
-              type="button"
-              className={u === 'kg' ? 'active' : ''}
-              onClick={() => onChangeDisplayUnit('kg')}
-            >
+            <button type="button" className={u === 'kg' ? 'active' : ''} onClick={() => onChangeDisplayUnit('kg')}>
               Kilograms
             </button>
-            <button
-              type="button"
-              className={u === 'lb' ? 'active' : ''}
-              onClick={() => onChangeDisplayUnit('lb')}
-            >
+            <button type="button" className={u === 'lb' ? 'active' : ''} onClick={() => onChangeDisplayUnit('lb')}>
               Pounds
             </button>
           </div>
@@ -49,9 +65,7 @@ export function SettingsPanel({ state, onClose, onChangeDisplayUnit, onImport }:
 
         <DataBackup state={state} onImport={onImport} />
 
-        <footer className="muted tiny center">
-          WoD Weight Tracker · offline-first PWA
-        </footer>
+        <footer className="muted tiny center">WoD Weight Tracker · offline-first PWA</footer>
       </div>
     </div>
   );

@@ -22,6 +22,7 @@ import { convertWeight, estimateOneRm, formatWeight } from '../lib/units';
 type Props = {
   state: PersistedState;
   exerciseId: string;
+  appearance: 'dark' | 'light';
   onBack: () => void;
   commit: (next: PersistedState) => void;
 };
@@ -30,7 +31,7 @@ function todayISO(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-export function ExerciseDetail({ state, exerciseId, onBack, commit }: Props) {
+export function ExerciseDetail({ state, exerciseId, appearance, onBack, commit }: Props) {
   const exercise = state.exercises.find((e) => e.id === exerciseId);
   const unit = state.settings.displayUnit;
 
@@ -41,6 +42,19 @@ export function ExerciseDetail({ state, exerciseId, onBack, commit }: Props) {
 
   const sorted = useMemo(() => sortEntriesDesc(entries), [entries]);
   const series = useMemo(() => aggregateByDay(entries, unit), [entries, unit]);
+
+  const chart = useMemo(() => {
+    const isLight = appearance === 'light';
+    return {
+      grid: isLight ? 'rgba(15,23,42,0.12)' : 'rgba(148,163,184,0.15)',
+      tick: isLight ? '#64748b' : '#94a3b8',
+      line1: isLight ? '#0284c7' : '#38bdf8',
+      line2: isLight ? '#7c3aed' : '#a78bfa',
+      tooltipBg: isLight ? '#ffffff' : '#111827',
+      tooltipBorder: isLight ? 'rgba(15,23,42,0.18)' : 'rgba(148,163,184,0.35)',
+      tooltipLabel: isLight ? '#0f172a' : '#e2e8f0',
+    };
+  }, [appearance]);
 
   const [date, setDate] = useState(todayISO);
   const [weight, setWeight] = useState('');
@@ -142,15 +156,15 @@ export function ExerciseDetail({ state, exerciseId, onBack, commit }: Props) {
           <div className="chart-wrap">
             <ResponsiveContainer width="100%" height={260}>
               <LineChart data={series} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
-                <CartesianGrid stroke="rgba(148,163,184,0.15)" strokeDasharray="4 4" />
+                <CartesianGrid stroke={chart.grid} strokeDasharray="4 4" />
                 <XAxis
                   dataKey="date"
-                  tick={{ fill: '#94a3b8', fontSize: 11 }}
+                  tick={{ fill: chart.tick, fontSize: 11 }}
                   tickMargin={8}
                   minTickGap={24}
                 />
                 <YAxis
-                  tick={{ fill: '#94a3b8', fontSize: 11 }}
+                  tick={{ fill: chart.tick, fontSize: 11 }}
                   width={44}
                   tickFormatter={(v) => `${Math.round(v)}`}
                 />
@@ -161,17 +175,20 @@ export function ExerciseDetail({ state, exerciseId, onBack, commit }: Props) {
                   ]}
                   labelFormatter={(l) => String(l)}
                   contentStyle={{
-                    background: '#111827',
-                    border: '1px solid rgba(148,163,184,0.35)',
+                    background: chart.tooltipBg,
+                    border: `1px solid ${chart.tooltipBorder}`,
                     borderRadius: 12,
                   }}
+                  labelStyle={{ color: chart.tooltipLabel }}
+                  itemStyle={{ color: chart.tooltipLabel }}
+                  wrapperStyle={{ outline: 'none' }}
                 />
-                <Legend />
+                <Legend wrapperStyle={{ color: chart.tick, fontSize: 12 }} />
                 <Line
                   type="monotone"
                   dataKey="maxEst1Rm"
                   name="Est. 1RM (day best)"
-                  stroke="#38bdf8"
+                  stroke={chart.line1}
                   strokeWidth={2}
                   dot={false}
                 />
@@ -179,7 +196,7 @@ export function ExerciseDetail({ state, exerciseId, onBack, commit }: Props) {
                   type="monotone"
                   dataKey="maxWeight"
                   name="Heaviest load (day)"
-                  stroke="#a78bfa"
+                  stroke={chart.line2}
                   strokeWidth={2}
                   dot={false}
                 />
