@@ -32,8 +32,14 @@ export default function App() {
         >
           WoD Tracker
         </button>
-        <button type="button" className="btn ghost" onClick={() => setSettingsOpen(true)}>
-          Settings
+        <button
+          type="button"
+          className="btn ghost settings-trigger"
+          onClick={() => setSettingsOpen(true)}
+          aria-label="Settings"
+          title="Settings"
+        >
+          <span aria-hidden="true">⚙️</span>
         </button>
       </nav>
 

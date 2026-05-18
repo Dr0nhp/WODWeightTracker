@@ -22,7 +22,7 @@ export function SettingsPanel({
   return (
     <div className="sheet overlay" role="dialog" aria-labelledby="settings-title" onClick={onClose}>
       <div className="sheet-panel stack gap-md animate-up" onClick={(e) => e.stopPropagation()}>
-        <header className="row spread center gap-sm">
+        <header className="sheet-head row spread center gap-sm">
           <h2 id="settings-title" className="h2">
             Settings
           </h2>

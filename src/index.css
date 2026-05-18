@@ -285,12 +285,16 @@ button {
   padding: 10px;
 }
 
-.brand-btn {
-  border: none;
-  background: transparent;
-  padding: 10px 6px;
-  font-weight: 750;
-  letter-spacing: -0.03em;
+.settings-trigger {
+  font-size: 1.35rem;
+  line-height: 1;
+  padding-inline: 12px;
+  margin-inline-start: auto;
+}
+
+.sheet-head {
+  width: 100%;
+  align-self: stretch;
 }
 
 .grid-2 {
