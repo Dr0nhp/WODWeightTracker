@@ -47,10 +47,18 @@ export function formatWeight(w: number, unit: 'kg' | 'lb', decimals = 1): string
 /**
  * Parses user-typed decimals with either `.` or `,` as separator (German iOS keypad often uses comma).
  * Also handles european grouping like `1.234,5` vs US `1,234.5`.
+ * Normalizes lookalike “comma” characters (incl. U+201A ‚ from some keyboards) before parsing.
  */
 export function parseFlexibleDecimal(raw: string): number {
-  let t = raw.trim().replace(/\s+/g, '');
+  let t = raw
+    .trim()
+    .normalize('NFKC')
+    .replace(/\s+/g, '');
+
   if (!t) return Number.NaN;
+
+  /* Typical decimal commas on phones: "," plus Unicode lookalikes */
+  t = t.replace(/[\u002C\u201A\uFF0C\u060C]/g, ',');
 
   const comma = t.includes(',');
   const dot = t.includes('.');

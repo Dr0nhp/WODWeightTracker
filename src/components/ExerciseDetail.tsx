@@ -206,7 +206,7 @@ export function ExerciseDetail({ state, exerciseId, appearance, onBack, commit }
         )}
       </section>
 
-      <form className="card pad stack gap-md" onSubmit={submit}>
+      <form className="card pad stack gap-md" noValidate onSubmit={submit}>
         <h2 className="h3">Log sets</h2>
         <label className="field">
           <span className="label">Date</span>
@@ -216,12 +216,19 @@ export function ExerciseDetail({ state, exerciseId, appearance, onBack, commit }
         <div className="grid-2">
           <label className="field">
             <span className="label">Weight</span>
+            {/* type="text" so iOS can enter locale decimals (comma). type="number" rejects "," before our parser runs */}
             <input
+              type="text"
               className="input"
               inputMode="decimal"
+              enterKeyHint="done"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
-              placeholder={unit === 'kg' ? 'e.g. 80' : 'e.g. 185'}
+              placeholder={unit === 'kg' ? 'z.B. 80,5 oder 107.5' : 'z.B. 185,5 or 225'}
               required
             />
           </label>
@@ -238,22 +245,30 @@ export function ExerciseDetail({ state, exerciseId, appearance, onBack, commit }
           <label className="field">
             <span className="label">Reps per set</span>
             <input
+              type="text"
               className="input"
               inputMode="numeric"
+              enterKeyHint="done"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
               value={reps}
               onChange={(e) => setReps(e.target.value)}
-              min={1}
               required
             />
           </label>
           <label className="field">
             <span className="label">Sets</span>
             <input
+              type="text"
               className="input"
               inputMode="numeric"
+              enterKeyHint="done"
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
               value={sets}
               onChange={(e) => setSets(e.target.value)}
-              min={1}
               required
             />
           </label>
