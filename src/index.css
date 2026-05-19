@@ -233,6 +233,9 @@ button {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
+  /* Native date `<input>` has a wide intrinsic min-width; allow flex/grid shrinking (Safari). */
+  min-width: 0;
 }
 
 .label {
@@ -242,11 +245,22 @@ button {
 
 .input {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   padding: 12px 12px;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--elevated);
   outline: none;
+}
+
+/* WebKit strips extra horizontal chrome from datetime fields so width:100% is respected */
+input[type='date'].input::-webkit-datetime-edit-fields-wrapper {
+  min-width: 0;
+}
+
+input[type='date'].input {
+  overflow: clip;
 }
 
 .input:focus {
