@@ -33,6 +33,7 @@ async function shareOrDownload(filename: string, body: string) {
   downloadJson(filename, body);
 }
 
+/** JSON export/share + import (@see docs/STYLING.md — block data-backup). */
 export function DataBackup({ state, onImport }: Props) {
   const exportNow = () => {
     const body = JSON.stringify(state, null, 2);
@@ -67,17 +68,17 @@ export function DataBackup({ state, onImport }: Props) {
   };
 
   return (
-    <section className="card pad stack gap-sm">
-      <h3 className="h3">Backup & restore</h3>
-      <p className="muted small">
-        Saves everything locally as JSON. On iPhone, Share lets you store the file in iCloud Drive,
-        Files, Google Drive, email, etc.
+    <section className="data-backup surface-card surface-card--pad-sm layout-stack layout-stack--gap-sm">
+      <h3 className="type-heading type-heading--level-3">Backup & restore</h3>
+      <p className="type-body type-body--muted type-body--small">
+        Saves everything locally as JSON. On iPhone, Share lets you store the file in iCloud Drive, Files,
+        Google Drive, email, etc.
       </p>
-      <div className="row gap-sm wrap">
-        <button type="button" className="btn primary" onClick={exportNow}>
+      <div className="data-backup__actions layout-row layout-row--gap-sm layout-row--wrap">
+        <button type="button" className="btn btn--primary" onClick={exportNow}>
           Export backup
         </button>
-        <button type="button" className="btn ghost" onClick={pickFile}>
+        <button type="button" className="btn btn--ghost" onClick={pickFile}>
           Import backup
         </button>
       </div>

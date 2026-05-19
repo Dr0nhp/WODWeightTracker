@@ -22,11 +22,11 @@ export default function App() {
   const commit = (next: PersistedState) => setState(next);
 
   return (
-    <div className="app">
-      <nav className="topbar row spread gap-sm">
+    <div className="app-shell">
+      <nav className="site-header layout-row layout-row--spread layout-row--gap-sm">
         <button
           type="button"
-          className="brand-btn"
+          className="site-header__brand"
           onClick={() => setRoute({ name: 'home' })}
           aria-label="Home"
         >
@@ -34,7 +34,7 @@ export default function App() {
         </button>
         <button
           type="button"
-          className="btn ghost settings-trigger"
+          className="btn btn--ghost site-header__settings-btn"
           onClick={() => setSettingsOpen(true)}
           aria-label="Settings"
           title="Settings"

@@ -9,6 +9,13 @@ type Props = {
   onImport: (next: PersistedState) => void;
 };
 
+function segmentOptionClass(isActive: boolean): string {
+  return ['segment-control__option', isActive ? 'segment-control__option--active' : '']
+    .filter(Boolean)
+    .join(' ');
+}
+
+/** Modal sheet: appearance, units, backup (@see docs/STYLING.md — block settings-sheet). */
 export function SettingsPanel({
   state,
   onClose,
@@ -20,44 +27,45 @@ export function SettingsPanel({
   const t = state.settings.theme;
 
   return (
-    <div className="sheet overlay" role="dialog" aria-labelledby="settings-title" onClick={onClose}>
-      <div className="sheet-panel stack gap-md animate-up" onClick={(e) => e.stopPropagation()}>
-        <header className="sheet-head row spread gap-sm">
-          <h2 id="settings-title" className="h2">
+    <div className="settings-sheet" role="dialog" aria-labelledby="settings-title" onClick={onClose}>
+      <div className="settings-sheet__panel layout-stack layout-stack--gap-md" onClick={(e) => e.stopPropagation()}>
+        <header className="settings-sheet__header layout-row layout-row--spread layout-row--gap-sm">
+          <h2 id="settings-title" className="settings-sheet__title type-heading type-heading--level-2">
             Settings
           </h2>
-          <button type="button" className="btn icon ghost" onClick={onClose} aria-label="Close">
+          <button type="button" className="btn btn--ghost btn--icon" onClick={onClose} aria-label="Close">
             ✕
           </button>
         </header>
 
-        <section className="card pad stack gap-sm">
-          <h3 className="h3">Appearance</h3>
-          <p className="muted small">Light mode, dark mode, or match your phone or computer.</p>
-          <div className="segmented segmented-three">
-            <button type="button" className={t === 'dark' ? 'active' : ''} onClick={() => onChangeTheme('dark')}>
+        <section className="settings-sheet__section surface-card surface-card--pad-sm layout-stack layout-stack--gap-sm">
+          <h3 className="settings-sheet__section-title type-heading type-heading--level-3">Appearance</h3>
+          <p className="type-body type-body--muted type-body--small">
+            Light mode, dark mode, or match your phone or computer.
+          </p>
+          <div className="segment-control segment-control--three">
+            <button type="button" className={segmentOptionClass(t === 'dark')} onClick={() => onChangeTheme('dark')}>
               Dark
             </button>
-            <button type="button" className={t === 'light' ? 'active' : ''} onClick={() => onChangeTheme('light')}>
+            <button type="button" className={segmentOptionClass(t === 'light')} onClick={() => onChangeTheme('light')}>
               Light
             </button>
-            <button type="button" className={t === 'system' ? 'active' : ''} onClick={() => onChangeTheme('system')}>
+            <button type="button" className={segmentOptionClass(t === 'system')} onClick={() => onChangeTheme('system')}>
               System
             </button>
           </div>
         </section>
 
-        <section className="card pad stack gap-sm">
-          <h3 className="h3">Display unit</h3>
-          <p className="muted small">
-            Charts and summaries convert logged weights into this unit. Each entry still remembers
-            the unit you typed.
+        <section className="settings-sheet__section surface-card surface-card--pad-sm layout-stack layout-stack--gap-sm">
+          <h3 className="settings-sheet__section-title type-heading type-heading--level-3">Display unit</h3>
+          <p className="type-body type-body--muted type-body--small">
+            Charts and summaries convert logged weights into this unit. Each entry still remembers the unit you typed.
           </p>
-          <div className="segmented">
-            <button type="button" className={u === 'kg' ? 'active' : ''} onClick={() => onChangeDisplayUnit('kg')}>
+          <div className="segment-control">
+            <button type="button" className={segmentOptionClass(u === 'kg')} onClick={() => onChangeDisplayUnit('kg')}>
               Kilograms
             </button>
-            <button type="button" className={u === 'lb' ? 'active' : ''} onClick={() => onChangeDisplayUnit('lb')}>
+            <button type="button" className={segmentOptionClass(u === 'lb')} onClick={() => onChangeDisplayUnit('lb')}>
               Pounds
             </button>
           </div>
@@ -65,7 +73,9 @@ export function SettingsPanel({
 
         <DataBackup state={state} onImport={onImport} />
 
-        <footer className="muted tiny center">WoD Weight Tracker · offline-first PWA</footer>
+        <footer className="settings-sheet__footer type-body type-body--muted type-body--tiny">
+          WoD Weight Tracker · offline-first PWA
+        </footer>
       </div>
     </div>
   );
