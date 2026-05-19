@@ -44,6 +44,31 @@ export function formatWeight(w: number, unit: 'kg' | 'lb', decimals = 1): string
   return `${rounded} ${unit}`;
 }
 
+/**
+ * Parses user-typed decimals with either `.` or `,` as separator (German iOS keypad often uses comma).
+ * Also handles european grouping like `1.234,5` vs US `1,234.5`.
+ */
+export function parseFlexibleDecimal(raw: string): number {
+  let t = raw.trim().replace(/\s+/g, '');
+  if (!t) return Number.NaN;
+
+  const comma = t.includes(',');
+  const dot = t.includes('.');
+
+  if (comma && dot) {
+    if (t.lastIndexOf(',') > t.lastIndexOf('.')) {
+      t = t.replace(/\./g, '').replace(',', '.');
+    } else {
+      t = t.replace(/,/g, '');
+    }
+  } else if (comma && !dot) {
+    t = t.replace(',', '.');
+  }
+
+  const n = Number(t);
+  return Number.isFinite(n) ? n : Number.NaN;
+}
+
 export function uid(): string {
   return crypto.randomUUID();
 }

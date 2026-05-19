@@ -17,7 +17,7 @@ import {
   sortEntriesDesc,
 } from '../lib/analytics';
 import { addLiftEntry, deleteExercise, removeLiftEntry } from '../lib/storage';
-import { convertWeight, estimateOneRm, formatWeight } from '../lib/units';
+import { convertWeight, estimateOneRm, formatWeight, parseFlexibleDecimal } from '../lib/units';
 
 type Props = {
   state: PersistedState;
@@ -83,9 +83,9 @@ export function ExerciseDetail({ state, exerciseId, appearance, onBack, commit }
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    const w = Number(weight);
-    const r = Number(reps);
-    const s = Number(sets);
+    const w = parseFlexibleDecimal(weight);
+    const r = parseFlexibleDecimal(reps);
+    const s = parseFlexibleDecimal(sets);
     if (!(w > 0) || !(r >= 1) || !(s >= 1)) return;
 
     commit(
