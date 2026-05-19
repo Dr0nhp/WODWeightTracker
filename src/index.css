@@ -247,6 +247,7 @@ button {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  min-height: 3rem;
   padding: 12px 12px;
   border-radius: 12px;
   border: 1px solid var(--border);
@@ -254,13 +255,43 @@ button {
   outline: none;
 }
 
-/* WebKit strips extra horizontal chrome from datetime fields so width:100% is respected */
+/* Native date/time controls inject extra chrome; normalize relative to other `.input`s */
+input[type='date'].input {
+  overflow: clip;
+  line-height: 1.35;
+}
+
+input[type='date'].input::-webkit-date-and-time-value {
+  margin: 0;
+  text-align: start;
+}
+
+input[type='date'].input::-webkit-datetime-edit,
+input[type='date'].input::-webkit-datetime-edit-fields-wrapper,
+input[type='date'].input::-webkit-datetime-edit-text,
+input[type='date'].input::-webkit-datetime-edit-month-field,
+input[type='date'].input::-webkit-datetime-edit-day-field,
+input[type='date'].input::-webkit-datetime-edit-year-field {
+  padding: 0;
+}
+
 input[type='date'].input::-webkit-datetime-edit-fields-wrapper {
   min-width: 0;
 }
 
-input[type='date'].input {
-  overflow: clip;
+input[type='date'].input::-webkit-calendar-picker-indicator {
+  opacity: 0.75;
+  margin-inline-start: 0.35rem;
+  cursor: pointer;
+}
+
+/* Firefox date input */
+input[type='date'].input::-moz-datetime-edit,
+input[type='date'].input::-moz-datetime-edit-prefix,
+input[type='date'].input::-moz-datetime-edit-year-field,
+input[type='date'].input::-moz-datetime-edit-month-field,
+input[type='date'].input::-moz-datetime-edit-day-field {
+  padding: 0;
 }
 
 .input:focus {
