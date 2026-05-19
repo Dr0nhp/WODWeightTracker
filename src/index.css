@@ -97,6 +97,14 @@ button {
   padding-bottom: max(16px, env(safe-area-inset-bottom));
 }
 
+.app button,
+.app [role='button'],
+.app input,
+.app select {
+  /* Stops grey flash overlay on Safari/iOS taps (focus ring stays on :focus-visible). */
+  -webkit-tap-highlight-color: transparent;
+}
+
 .topbar {
   position: sticky;
   top: 0;
@@ -256,30 +264,19 @@ button {
   box-sizing: border-box;
 }
 
-/* iOS/WebKit: native date control has a large intrinsic min-width — clamp with grid + clip */
-.input-date-shell {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  overflow: hidden;
-  border-radius: var(--radius);
-}
-
-.input-date-shell > input[type='date'].input {
+/**
+ * Safari/iOS `<input type="date">` often reports a fat intrinsicMinWidth; clamp with logical sizing
+ * (no clipping wrapper — that broke border radius + caused odd paint on touch/focus).
+ */
+input[type='date'].input.input-date-native {
   display: block;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
-
-/* Native date/time controls inject extra chrome; normalize relative to other `.input`s */
-input[type='date'].input {
-  overflow: clip;
   line-height: 1.35;
   font-size: 1rem;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
 }
+
 
 
 input[type='date'].input::-webkit-date-and-time-value {
@@ -316,9 +313,16 @@ input[type='date'].input::-moz-datetime-edit-day-field {
   padding: 0;
 }
 
+/* Focus ring only on keyboards / fine pointers that use :focus-visible (avoids iOS tap “flash”). */
 .input:focus {
-  border-color: color-mix(in srgb, var(--accent), transparent 30%);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent), transparent 74%);
+  outline: none;
+}
+
+@media (hover: hover) {
+  .input:focus-visible {
+    border-color: color-mix(in srgb, var(--accent), transparent 30%);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent), transparent 74%);
+  }
 }
 
 .btn {

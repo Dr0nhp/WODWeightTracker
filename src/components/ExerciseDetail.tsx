@@ -210,9 +210,7 @@ export function ExerciseDetail({ state, exerciseId, appearance, onBack, commit }
         <h2 className="h3">Log sets</h2>
         <label className="field">
           <span className="label">Date</span>
-          <div className="input-date-shell">
-            <input className="input" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-          </div>
+          <input className="input input-date-native" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
         </label>
 
         <div className="grid-2">
